@@ -22,7 +22,7 @@ public class Horse extends Thread{
                 int newValue = Integer.valueOf(textField.getText()) - 1;
                 textField.setText(String.valueOf(newValue));
             }
-            GameFrame.getFrame().endRace();
+            GameFrame.getFrame().endRace(this);
 
         } catch (InterruptedException e){
             System.out.println(currentThread() + " lost");

@@ -22,7 +22,7 @@ public class GameFrame {
 
         createElements();
         addFrameContent();
-        frame.pack();
+        //frame.pack();
     }
 
     public static GameFrame getFrame() {
@@ -43,6 +43,7 @@ public class GameFrame {
 
     private void addFrameContent() {
         frame.setLayout(new GridLayout(4,2));
+        frame.setSize(new Dimension(350,350));
 
         for(int i = 0; i < horses.size(); i++){
             JLabel label = new JLabel("Horse " + (i+1));
@@ -60,17 +61,23 @@ public class GameFrame {
                 startRace();
             }
         });
-        frame.add(startRace);
+        frame.add(startRace, Component.BOTTOM_ALIGNMENT);
 
     }
 
     private void startRace() {
-        for(Horse h : horses)
+        for(Horse h : horses) {
+            h.getTextField().setText(String.valueOf(RACE_LENGTH));
             h.start();
+        }
     }
 
-    public void endRace() {
-        for(Horse h : horses)
-            h.interrupt();
+    public void endRace(Horse winner) {
+        for(Horse h : horses)       h.interrupt();
+        JLabel winnerMessage = new JLabel("Cavalo " + (horses.indexOf(winner) + 1) + " foi o vencedor!");
+        frame.add(winnerMessage);
+
+        SwingUtilities.updateComponentTreeUI(frame);
     }
+
 }
