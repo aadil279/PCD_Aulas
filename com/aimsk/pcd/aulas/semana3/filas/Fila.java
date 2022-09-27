@@ -4,11 +4,12 @@ public class Fila {
     private int[] queue;
     private int head;
     private int tail;
+    private static final int MAXIMUM_SIZE = 1000;
 
     public Fila() {
-        int[] queue = new int[1000];
+        queue = new int[MAXIMUM_SIZE];
         tail = -1;  // -1 porque nao tem nenhum elemento inicialmente
-        head = -1;  // -1 porque nao tem nenhum elemento inicialmente
+        head = 0;  // 0 porque nao tem nenhum elemento inicialmente
     }
 
     public boolean empty() {
@@ -16,12 +17,47 @@ public class Fila {
     }
 
     public int peek() {
-        if(!empty())
+        if(empty())
             throw new IllegalStateException();
         return queue[head];
     }
 
     public int poll() {
-        return 0;   //TODO acabar isto
+        if(empty())
+            throw new IllegalStateException();
+
+        int value = queue[head];
+        int lastValue = queue[tail];
+        // Shift dos valores para o inicio do array
+        for(int i = 0; i < tail-1; i++) {
+            queue[i] = queue[i+1];
+        }
+        tail--;
+        queue[tail] = lastValue;
+
+        return value;
     }
+
+    public void offer(int item) {
+        tail++;
+        if(tail >= queue.length)
+            throw new IllegalStateException();
+
+        queue[tail] = item;
+    }
+
+    public int size() {
+        return tail - head + 1;
+    }
+
+    @Override
+    public String toString() {
+        String result = "[";
+        for(int i = head; i <= tail; i++)
+            result = result + queue[i] + ", ";
+
+        result = result + "]";
+        return result;
+    }
+
 }
