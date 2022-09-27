@@ -1,4 +1,4 @@
-package com.aimsk.pcd.aulas.aula1.HorseRace;
+package com.aimsk.pcd.aulas.semana2.HorseRace;
 
 public class Main {
 

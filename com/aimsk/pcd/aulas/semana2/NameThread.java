@@ -1,4 +1,4 @@
-package com.aimsk.pcd.aulas.aula1;
+package com.aimsk.pcd.aulas.semana2;
 
 public class NameThread extends Thread {
     private final int identifier;
