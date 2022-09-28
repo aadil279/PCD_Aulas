@@ -4,7 +4,7 @@ public class Fila {
     private int[] queue;
     private int head;
     private int tail;
-    private static final int MAXIMUM_SIZE = 1000;
+    private static final int MAXIMUM_SIZE = 10000;
 
     public Fila() {
         queue = new int[MAXIMUM_SIZE];
@@ -22,7 +22,7 @@ public class Fila {
         return queue[head];
     }
 
-    public int poll() {
+    public synchronized int poll() {
         if(empty())
             throw new IllegalStateException();
 
@@ -38,7 +38,7 @@ public class Fila {
         return value;
     }
 
-    public void offer(int item) {
+    public synchronized void offer(int item) {
         tail++;
         if(tail >= queue.length)
             throw new IllegalStateException();
