@@ -3,7 +3,7 @@ package com.aimsk.pcd.aulas.semana4.Banquete;
 public class Glutao extends Thread{
     @Override
     public void run() {
-        for(int i = 0; i < Main.NUMERO_CONSUMIDO; i++) {
+        while(Mesa.getMesa().getTotalJavalis() < Main.NUMERO_TOTAL_A_CONSUMIR || !Mesa.getMesa().isEmpty()) {
 
             try {
                 Mesa.getMesa().consume();
@@ -13,6 +13,8 @@ public class Glutao extends Thread{
             }
 
         }
+
+        System.out.println(getNome() + " terminado");
     }
 
     private final String nome;

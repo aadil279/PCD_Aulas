@@ -1,15 +1,17 @@
 package com.aimsk.pcd.aulas.semana4.Banquete;
 
-import java.util.PriorityQueue;
+import java.util.LinkedList;
 
+//TODO adicionar variavel para a contagem total dos javalis, se chegou ao Limite total, cancelar todos os threads
 public class Mesa {
     private static final int NUMERO_DE_JAVALIS = 10;
 
     private static Mesa estaMesa;
-    private PriorityQueue<Javali> mesa;
+    private LinkedList<Javali> mesa;
+    private int totalJavalis = 0;
 
     private Mesa() {
-        mesa = new PriorityQueue<>();
+        mesa = new LinkedList<>();
     }
 
     public static Mesa getMesa() {
@@ -19,10 +21,13 @@ public class Mesa {
     }
 
     public synchronized void add(Javali j) throws InterruptedException {
-        while(mesa.size() == NUMERO_DE_JAVALIS)
+        while(mesa.size() >= NUMERO_DE_JAVALIS) {
+            System.out.println("Mesa cheia, aguardando que javalis sejam retirados...");
             wait();
-
-        mesa.add(j);
+        }
+        mesa.offer(j);
+        totalJavalis++;
+        System.out.println("[ADD]       " + j + " foi adicionado a mesa.");
         notifyAll();
     }
 
@@ -30,7 +35,23 @@ public class Mesa {
         while(mesa.size() == 0)
             wait();
 
-        mesa.poll();
+        Javali retirado = mesa.poll();
+        System.out.println("[CONSUME]   " + retirado + " foi retirado da mesa");
         notifyAll();
     }
+
+    public boolean isEmpty() {
+        return mesa.isEmpty();
+    }
+
+    public synchronized int getTotalJavalis() {
+        return totalJavalis;
+    }
+
+    public synchronized int incrementJavalis() {
+        totalJavalis = totalJavalis + 1;
+        return totalJavalis;
+    }
+
+
 }

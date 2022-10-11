@@ -1,6 +1,6 @@
 package com.aimsk.pcd.aulas.semana4.Banquete;
 
-public class Javali {
+public class Javali{
     private final Cozinheiro cozinheiro;
     private final int numero;
 
@@ -13,4 +13,5 @@ public class Javali {
     public String toString() {
         return "Javali " + numero + " feito por " + cozinheiro;
     }
+
 }
