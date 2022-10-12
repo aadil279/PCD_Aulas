@@ -4,11 +4,13 @@ public class Cozinheiro extends Thread{
 
     @Override
     public void run() {
-        while(Mesa.getMesa().getTotalJavalis() < Main.NUMERO_TOTAL_A_CONSUMIR){
-            try {
-                Mesa.getMesa().add(new Javali(this, Mesa.getMesa().incrementJavalis()));     // Adiciona a mesa um javali associado ao cozinheiro atual, com o numero do javali na mesa
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        synchronized (Mesa.getMesa()) {
+            while (Mesa.getMesa().getTotalJavalis() < Main.NUMERO_TOTAL_A_CONSUMIR) {
+                try {
+                    Mesa.getMesa().add(new Javali(this, Mesa.getMesa().getTotalJavalis() + 1));     // Adiciona a mesa um javali associado ao cozinheiro atual, com o numero do javali na mesa
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         System.out.println(getNome() + " terminado");

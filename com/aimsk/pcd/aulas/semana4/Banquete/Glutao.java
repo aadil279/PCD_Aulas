@@ -3,17 +3,17 @@ package com.aimsk.pcd.aulas.semana4.Banquete;
 public class Glutao extends Thread{
     @Override
     public void run() {
-        while(Mesa.getMesa().getTotalJavalis() < Main.NUMERO_TOTAL_A_CONSUMIR || !Mesa.getMesa().isEmpty()) {
+        synchronized (Mesa.getMesa()) {
+            while (Mesa.getMesa().getTotalJavalisConsumidos() < Main.NUMERO_TOTAL_A_CONSUMIR) {
 
-            try {
-                Mesa.getMesa().consume();
-            }
-            catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+                try {
+                    Mesa.getMesa().consume();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
 
+            }
         }
-
         System.out.println(getNome() + " terminado");
     }
 

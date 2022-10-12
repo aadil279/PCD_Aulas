@@ -9,12 +9,13 @@ public class Mesa {
     private static Mesa estaMesa;
     private LinkedList<Javali> mesa;
     private int totalJavalis = 0;
+    private int totalJavalisConsumidos = 0;
 
     private Mesa() {
         mesa = new LinkedList<>();
     }
 
-    public static Mesa getMesa() {
+    public static synchronized Mesa getMesa() {
         if(estaMesa == null)
             estaMesa = new Mesa();
         return estaMesa;
@@ -36,11 +37,12 @@ public class Mesa {
             wait();
 
         Javali retirado = mesa.poll();
+        totalJavalisConsumidos++;
         System.out.println("[CONSUME]   " + retirado + " foi retirado da mesa");
         notifyAll();
     }
 
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return mesa.isEmpty();
     }
 
@@ -48,10 +50,7 @@ public class Mesa {
         return totalJavalis;
     }
 
-    public synchronized int incrementJavalis() {
-        totalJavalis = totalJavalis + 1;
-        return totalJavalis;
+    public synchronized int getTotalJavalisConsumidos() {
+        return totalJavalisConsumidos;
     }
-
-
 }
