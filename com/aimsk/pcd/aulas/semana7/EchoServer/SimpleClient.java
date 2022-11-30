@@ -24,15 +24,14 @@ public class SimpleClient {
     public void runClient() throws InterruptedException{
         try {
             connectToServer();
-            notifyAll();
             sendMessages();
         } catch (IOException e) {
-            //System.out.println("erro");
+            System.out.println("erro1 runclient");
         } finally { // a fechar
             try {
                 socket.close();
             } catch (IOException e) {
-                //System.out.println("erro");
+                System.out.println("erro2 no runclient");
             }
         }
     }

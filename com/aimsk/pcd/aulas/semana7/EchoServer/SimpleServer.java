@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SimpleServer {
-    public static final int PORTO = 8980;       // TODO Ver como aceitar varios clientes no mesmo porto
+    public static final int PORTO = 8980;
 
 
 
@@ -13,7 +13,7 @@ public class SimpleServer {
         try {
             new SimpleServer().startServing();
         } catch (IOException e) {
-           // System.out.println("erro");
+            System.out.println("erro");
         }
     }
 
@@ -22,12 +22,9 @@ public class SimpleServer {
 
         try {
             while(true) {
-                wait();
                 Socket socket = ss.accept();
                 new ServerResponse(socket).start();
             }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } finally {
             ss.close();
         }
@@ -55,7 +52,7 @@ public class SimpleServer {
                     socket.close();
                 }
             }catch (IOException e) {
-
+                System.out.println("Erro no run");
             }
         }
 
