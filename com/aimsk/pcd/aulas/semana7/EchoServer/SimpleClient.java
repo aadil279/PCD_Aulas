@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import static java.lang.Thread.sleep;
+
 public class SimpleClient {
     public static final int NUMERO_MENSAGENS = 10;
     private BufferedReader in;
@@ -11,12 +13,18 @@ public class SimpleClient {
     private Socket socket;
 
     public static void main(String[] args) {
-        new SimpleClient().runClient();
+
+        try {
+            new SimpleClient().runClient();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void runClient() {
+    public void runClient() throws InterruptedException{
         try {
             connectToServer();
+            notifyAll();
             sendMessages();
         } catch (IOException e) {
             //System.out.println("erro");
@@ -37,11 +45,12 @@ public class SimpleClient {
         out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
     }
 
-    private void sendMessages() throws IOException{
+    private void sendMessages() throws IOException, InterruptedException{
         for(int i = 0; i < NUMERO_MENSAGENS; i++) {
             out.println("Ola " + i);
             String str = in.readLine();
             System.out.println(str);
+            sleep(1000);
         }
         out.println("FIM");
     }
