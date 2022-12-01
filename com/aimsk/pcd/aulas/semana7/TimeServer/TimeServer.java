@@ -3,16 +3,30 @@ package com.aimsk.pcd.aulas.semana7.TimeServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class TimeServer {
     public static final int PORT = 2424;
+    public static final long TIME_CYCLE = 30000;     // Tempo entre cada ciclo de envio de tempo
+    public static final int TIMEOUT = 2000;         // Passados dois segundos
 
     public static void main(String[] args) {
         //TODO Server main
     }
 
-
+    public void startServing() throws IOException{
+        ServerSocket ss = new ServerSocket(PORT);
+        try{
+            while(true) {
+                Socket clientSocket = ss.accept();
+                new ClientSocketHandler(clientSocket).start();
+            }
+        }finally{
+            ss.close();
+        }
+    }
     /**
      * Private class to handle the server response to each individual client
      * @author Aadil Sidik
@@ -21,6 +35,7 @@ public class TimeServer {
         private final Socket client;
         private ObjectOutputStream out;
         private ObjectInputStream in;
+        private boolean stop = false;
         /**
          *
          * @param client The socket connected to the client
@@ -41,15 +56,36 @@ public class TimeServer {
         private void makeConnections() throws IOException {
             out = new ObjectOutputStream(client.getOutputStream());
             in = new ObjectInputStream(client.getInputStream());
+            client.setSoTimeout(TIMEOUT);
         }
 
         @Override
         public void run() {
-            //TODO ClientSocketHandler run method
+
+            try {
+                while(!stop) {
+                    out.writeObject(new TimeMessage(System.currentTimeMillis()));
+                    ReceptionConfirmationMessage message = (ReceptionConfirmationMessage) in.readObject();
+                    System.out.println(message.getText());
+                    sleep(TIME_CYCLE);
+                }
+
+            } catch(SocketTimeoutException e ) {
+                System.out.println("Timeout! Fechando Thread...");
+                try {
+                    client.close();
+                    stopThread();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } catch (IOException | ClassNotFoundException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void stopThread() {
+            this.stop = true;
         }
     }
-
-
-
 
 }
