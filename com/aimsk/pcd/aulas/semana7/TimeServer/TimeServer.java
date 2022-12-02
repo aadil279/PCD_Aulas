@@ -13,20 +13,28 @@ public class TimeServer {
     public static final int TIMEOUT = 2000;         // Passados dois segundos
 
     public static void main(String[] args) {
-        //TODO Server main
+        TimeServer server = new TimeServer();
+        try {
+            server.startServing();
+        }catch(IOException e){
+            throw new RuntimeException();
+        }
     }
 
     public void startServing() throws IOException{
         ServerSocket ss = new ServerSocket(PORT);
+        System.out.println("Server started...");
         try{
             while(true) {
                 Socket clientSocket = ss.accept();
+                System.out.println("[CONNECTION] New connection started");
                 new ClientSocketHandler(clientSocket).start();
             }
         }finally{
             ss.close();
         }
     }
+
     /**
      * Private class to handle the server response to each individual client
      * @author Aadil Sidik
@@ -66,7 +74,7 @@ public class TimeServer {
                 while(!stop) {
                     out.writeObject(new TimeMessage(System.currentTimeMillis()));
                     ReceptionConfirmationMessage message = (ReceptionConfirmationMessage) in.readObject();
-                    System.out.println(message.getText());
+                    System.out.println("[SERVER] Received message from client " + message.getText());
                     sleep(TIME_CYCLE);
                 }
 

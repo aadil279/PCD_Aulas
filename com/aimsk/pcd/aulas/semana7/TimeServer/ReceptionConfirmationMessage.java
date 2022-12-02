@@ -1,6 +1,8 @@
 package com.aimsk.pcd.aulas.semana7.TimeServer;
 
-public class ReceptionConfirmationMessage {
+import java.io.Serializable;
+
+public class ReceptionConfirmationMessage implements Serializable {
     private final String text;
 
 

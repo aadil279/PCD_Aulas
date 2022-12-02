@@ -1,6 +1,8 @@
 package com.aimsk.pcd.aulas.semana7.TimeServer;
 
-public class TimeMessage {
+import java.io.Serializable;
+
+public class TimeMessage implements Serializable {
     private final long time;
 
     public TimeMessage(long time) {
